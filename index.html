@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>My Nome</title>
+    <link rel="stylesheet" href="appPlay/play.css">
+    <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+
+    <!-- shims for midi.js package -->
+    <script src="lib/midi.js/inc/shim/Base64.js" type="text/javascript"></script>
+    <script src="lib/midi.js/inc/shim/Base64binary.js" type="text/javascript"></script>
+    <script src="lib/midi.js/inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+    <!-- midi.js package -->
+    <script src="lib/midi.js/js/midi/audioDetect.js" type="text/javascript"></script>
+    <script src="lib/midi.js/js/midi/gm.js" type="text/javascript"></script>
+    <script src="lib/midi.js/js/midi/loader.js" type="text/javascript"></script>
+    <script src="lib/midi.js/js/midi/plugin.audiotag.js" type="text/javascript"></script>
+    <script src="lib/midi.js/js/midi/plugin.webaudio.js" type="text/javascript"></script>
+    <script src="lib/midi.js/js/midi/plugin.webmidi.js" type="text/javascript"></script>
+    <!-- utils -->
+    <script src="lib/midi.js/js/util/dom_request_xhr.js" type="text/javascript"></script>
+    <script src="lib/midi.js/js/util/dom_request_script.js" type="text/javascript"></script>
+
+
+    <!-- Parsing melody -->
+    <script type='module' src='./appPlay/playMain.js'></script>
+  </head>
+  <body>
+    <div id='main-container'>
+      <div>
+        <button id="incr-beats" class="big-btn">⏶︎ Beats</button>
+        <button id="decr-beats" class="big-btn">⏷︎ Beats</button>
+      </div>
+      <div>
+        <button id="play-toggle" class="big-btn">⏯︎</button>
+        <button id="incr-bpm" class="big-btn">⏶︎ BPM</button>
+        <button id="decr-bpm" class="big-btn">⏷︎ BPM</button>
+      </div>
+    </div>
+
+  </body>
+</html>

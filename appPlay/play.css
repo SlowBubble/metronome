@@ -1,0 +1,16 @@
+
+#main-container {
+    display: flex;
+}
+
+#main-container div {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.big-btn {
+    min-width: 50%;
+    min-height: 100px;
+    font-size: 35px;
+}
