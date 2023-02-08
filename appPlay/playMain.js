@@ -6,6 +6,22 @@ import * as math from '../esModules/math-util/mathUtil.js';
 
 main();
 
+// The wake lock sentinel.
+let wakeLock = null;
+
+// Function that attempts to request a screen wake lock.
+const requestWakeLock = async () => {
+  try {
+    wakeLock = await navigator.wakeLock.request();
+    wakeLock.addEventListener('release', () => {
+      console.log('Screen Wake Lock released:', wakeLock.released);
+    });
+    console.log('Screen Wake Lock released:', wakeLock.released);
+  } catch (err) {
+    console.error(`${err.name}, ${err.message}`);
+  }
+};
+
 function main() {
   const [soundPub, soundSub] = pubSub.make();
   const [readyPub, readySub] = pubSub.make();
@@ -60,26 +76,40 @@ function main() {
         restart();
       }
   }
-  document.getElementById('play-toggle').onclick = evt => {
+  const playToggleElt = document.getElementById('play-toggle');
+  playToggleElt.onclick = evt => {
       if (playingIntervalId) {
-          clearInterval(playingIntervalId);
-          playingIntervalId = null;
-          evt.target.style.background = '';
-          return;
+        stop();
+        return;
       }
 
-      evt.target.style.background = 'red';
       restart();
   }
+  function stop() {
+    if (!playingIntervalId) {
+      return;
+    }
+    clearInterval(playingIntervalId);
+    playingIntervalId = null;
+    playToggleElt.style.background = '';
+    if (wakeLock) {
+      wakeLock.release();
+      wakeLock = null;
+    }
+  }
   function restart() {
-      if (playingIntervalId) {
-        clearInterval(playingIntervalId);
-        playingIntervalId = null;
-      }
+      stop();
+
+      playToggleElt.style.background = 'salmon';
       musicalSound.configure([{
         channelNum: 0,
         instrumentName: sound.instruments.synth_drum,
       }]);
+
+      if (spokenStyle) {
+        requestWakeLock();
+      }
+
       playingIntervalId = window.setInterval(_ => {
         if (spokenStyle) {
           let utterance = new SpeechSynthesisUtterance(`${currBeat + 1}`);
