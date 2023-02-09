@@ -3,6 +3,7 @@ import { NoteOnEvt } from '../esModules/midi-data/midiEvent.js';
 import * as sound from '../esModules/musical-sound/musicalSound.js';
 import * as pubSub from '../esModules/pub-sub/pubSub.js';
 import * as math from '../esModules/math-util/mathUtil.js';
+import { getLocales } from './speech.js';
 
 main();
 
@@ -37,17 +38,22 @@ function main() {
   let currBeat = 0;
   let playingIntervalId = null;
   let beatsPerMin = 60;
-  let spokenStyle = false;
+  let spokenStyleIdx = 0;
+  let utteranceRate = 0.9;
   document.getElementById('change-beat-style').onclick = evt => {
-    spokenStyle = !spokenStyle;
-    evt.target.style.background = spokenStyle ? 'beige' : '';
+    const locales = getLocales();
+    spokenStyleIdx += 1;
+    spokenStyleIdx = spokenStyleIdx % (locales.length + 1);
+    evt.target.textContent = spokenStyleIdx === 0 ? 'Drums' : locales[spokenStyleIdx - 1].name;
 
     if (playingIntervalId) {
       restart();
     }
   }
+  const incrBpmElt = document.getElementById('incr-bpm');
   document.getElementById('incr-bpm').onclick = _ => {
       beatsPerMin += 10;
+      incrBpmElt.textContent = `${beatsPerMin} BPM`;
       if (playingIntervalId) {
         restart();
       }
@@ -57,12 +63,15 @@ function main() {
           return;
       }
       beatsPerMin -= 10;
+      incrBpmElt.textContent = `${beatsPerMin} BPM`;
       if (playingIntervalId) {
         restart();
       }
   }
-  document.getElementById('incr-beats').onclick = _ => {
+  const incrBeatsElt = document.getElementById('incr-beats');
+  incrBeatsElt.onclick = _ => {
       beatsPerBar += 1;
+      incrBeatsElt.textContent = `${beatsPerBar} beats`;
       if (playingIntervalId) {
         restart();
       }
@@ -72,12 +81,13 @@ function main() {
           return;
       }
       beatsPerBar -= 1;
+      incrBeatsElt.textContent = `${beatsPerBar} beats`;
       if (playingIntervalId) {
         restart();
       }
   }
   const playToggleElt = document.getElementById('play-toggle');
-  playToggleElt.onclick = evt => {
+  playToggleElt.onclick = _ => {
       if (playingIntervalId) {
         stop();
         return;
@@ -106,14 +116,19 @@ function main() {
         instrumentName: sound.instruments.synth_drum,
       }]);
 
-      if (spokenStyle) {
+      if (spokenStyleIdx > 0) {
         requestWakeLock();
       }
 
       playingIntervalId = window.setInterval(_ => {
-        if (spokenStyle) {
+        if (spokenStyleIdx > 0) {
+          if (window.speechSynthesis.speaking) {
+            utteranceRate += 0.1;
+            console.log('Utterance rate is too low. Increased to', utteranceRate);
+          }
           let utterance = new SpeechSynthesisUtterance(`${currBeat + 1}`);
-          utterance.rate = 0.9;
+          utterance.rate = utteranceRate;
+          utterance.voice = getLocales()[spokenStyleIdx - 1].voice;
           window.speechSynthesis.speak(utterance);
         } else {
           getEvts(currBeat, beatsPerBar).forEach(evt => {
