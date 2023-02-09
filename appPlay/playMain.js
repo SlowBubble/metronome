@@ -44,6 +44,7 @@ function main() {
     const locales = getLocales();
     spokenStyleIdx += 1;
     spokenStyleIdx = spokenStyleIdx % (locales.length + 1);
+    console.log(locales);
     evt.target.textContent = spokenStyleIdx === 0 ? 'Drums' : locales[spokenStyleIdx - 1].name;
 
     if (playingIntervalId) {
