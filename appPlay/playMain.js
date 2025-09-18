@@ -148,10 +148,10 @@ function getEvts(idx, numBeats) {
       return [{noteNum: 35, velocity: 120}, {noteNum: 42, velocity: 90}];
     }
     if (idx == numBeats - 1) {
-      return [{noteNum: 37, velocity: 80}, {noteNum: 42, velocity: 30}];
+      return [{noteNum: 37, velocity: 90}, {noteNum: 42, velocity: 60}];
     }
     if (math.mod(idx, 2) == 0) {
-      return [{noteNum: 36, velocity: 45}, {noteNum: 42, velocity: 45}];
+      return [{noteNum: 36, velocity: 50}, {noteNum: 42, velocity: 50}];
     }
-    return [{noteNum: 36, velocity: 45}, {noteNum: 44, velocity: 70}];
+    return [{noteNum: 37, velocity: 30}, {noteNum: 44, velocity: 80}];
 }
