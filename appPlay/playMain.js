@@ -153,5 +153,5 @@ function getEvts(idx, numBeats) {
     if (math.mod(idx, 2) == 0) {
       return [{noteNum: 36, velocity: 50}, {noteNum: 42, velocity: 50}];
     }
-    return [{noteNum: 37, velocity: 30}, {noteNum: 44, velocity: 80}];
+    return [{noteNum: 54, velocity: 30}, {noteNum: 44, velocity: 80}];
 }
